@@ -1,0 +1,8 @@
+.vscode
+*.class
+*.o
+*~
+~*
+*.pyc
+__pycache__
+.antlr

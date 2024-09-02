@@ -1,0 +1,7 @@
+// p1.txt
+map1: { "name" : "John", "age" : "30" }; // Define map1 com pares chave-valor
+print map1; // Imprime o conteúdo de map1
+map1["city"] : "New York"; // Adiciona uma nova chave-valor a map1
+print map1["city"]; // Imprime o valor associado à chave "city" em map1
+map1["age"] : "31"; // Atualiza o valor associado à chave "age" em map1
+print map1; // Imprime o conteúdo atualizado de map1

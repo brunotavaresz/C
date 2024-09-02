@@ -1,0 +1,108 @@
+main(stat) ::= <<
+from tkinter import *
+import time, os, sys
+from Types import *
+from View import *
+from utils import *
+
+root= Tk()
+canvas=Canvas(root,width=10000,height=10000)
+canvas.pack() 
+root.bind("\<Button-1\>",onClick)
+
+
+<if(stat)><stat;separator="\n"><endif>
+>>
+
+
+
+print(value) ::= <<
+print(<value>)
+>>
+
+
+
+instanciate_simples(var,type,value) ::= <<
+<var>=<type>(<value>)
+>>
+
+instanciate_point_vector(var,type,value) ::= <<
+<var>=<type><value>
+>>
+
+instanciate_view(var,type,value) ::= <<
+<var>=<type>(<value>,canvas=canvas,root=root)
+
+
+>>
+
+
+
+instanciate_at_point(type,value,view) ::= <<
+canvas.create_<type>(<value>)
+>>
+
+instanciate_at_point_with_reference(type,value,var,view,typeobject) ::= <<
+<var>=<typeobject>(<value>,canvas=canvas)
+>>
+
+assignment(var,value) ::= <<
+<var>=<value>
+>>
+wait_for_mouse(view) ::= <<
+<view>.getMouse()
+>>
+
+declaration_wait_for_mouse(var,view) ::= <<
+<var>=getMouse(canvas)
+>>
+
+refresh(view,time) ::= <<
+<view>.refresh(<time>)
+>>
+
+close(view) ::= <<
+<view>.canvas.destroy()
+>>
+
+instanciating(view,type,value) ::= <<
+<view>.add_<type>(<value>)
+>>
+
+Loop(var_loop,inicial,final,statments)::= <<
+for <var_loop> in range(<inicial>,<final>):
+    <statments> >>
+
+properties_change(view,var,expression,atributo)::= <<
+
+canvas.itemconfig(<var>.object,<atributo>=<expression>) >>
+
+
+property_block_change(var,view,statments)::=<<
+<view>.canvas.itemconfig(<var>.object,<statments>)
+>>
+
+
+move_object(var,view,expression)::= <<
+
+<view>.move(<var>.object,<expression>)
+>>
+
+move_view(view,expression)::= <<
+
+<view>.moveView(<expression>)
+>>
+
+condi(ifblock,elseblock)::= <<
+<ifblock>
+<elseblock>
+>>
+ifcond(first,second,statments)::=<<
+if <first>==<second>:
+    <statments>
+     >>
+
+elsecond(statments)::=<<
+else: 
+    <statments>
+     >>

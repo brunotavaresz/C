@@ -1,0 +1,6 @@
+2*[1,2] -> x;           # escreve na consola [2.0, 4.0]
+show x;
+show 2*3;               # escreve na consola 6.0
+show x*(0.5*1);         # escreve na consola [1.0, 2.0]
+show x+[5,5]*3;         # escreve n 
+show [1,2].[2,1];     

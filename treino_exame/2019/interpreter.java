@@ -1,0 +1,200 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+@SuppressWarnings("CheckReturnValue")
+public class interpreter extends VectorBaseVisitor<ArrayList<Double>> {
+
+   HashMap<String, ArrayList<Double>> var = new HashMap<>();
+
+   @Override public ArrayList<Double> visitProgram(VectorParser.ProgramContext ctx) {
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public ArrayList<Double> visitStat(VectorParser.StatContext ctx) {
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public ArrayList<Double> visitPrint(VectorParser.PrintContext ctx) {
+      ArrayList<Double> result = visit(ctx.expression());
+
+      if (result != null) {
+         System.out.println(result);
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return result;
+   }
+
+   @Override public ArrayList<Double> visitAssigment(VectorParser.AssigmentContext ctx) {
+      String id = ctx.ID().getText();
+      ArrayList<Double> result = visit(ctx.expression());
+
+      if(id != null && result != null) {
+         var.put(id, result);
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return null;
+   }
+
+   @Override public ArrayList<Double> visitExprUniSub(VectorParser.ExprUniSubContext ctx) {
+      ArrayList<Double> result = visit(ctx.expression());
+
+      ArrayList<Double> array = new ArrayList<>();
+
+      if (result != null) {
+         for (Double i: result) {
+            array.add(-i);
+         }
+         return array;
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return array;
+   }
+
+   @Override public ArrayList<Double> visitExprUniAdd(VectorParser.ExprUniAddContext ctx) {
+      ArrayList<Double> result = visit(ctx.expression());
+
+      return result;
+   }
+
+   @Override public ArrayList<Double> visitExprParen(VectorParser.ExprParenContext ctx) {
+      ArrayList<Double> result = visit(ctx.expression());
+
+      return result;
+   }
+
+   @Override public ArrayList<Double> visitExprNumber(VectorParser.ExprNumberContext ctx) {
+      String result = ctx.NUMBER().getText();
+      ArrayList<Double> array = new ArrayList<>();
+
+      Double number = Double.parseDouble(result);
+
+      array.add(number);
+
+      return array;
+   }
+
+   @Override public ArrayList<Double> visitExprSub(VectorParser.ExprSubContext ctx) {
+      ArrayList<Double> e1 = visit(ctx.expression(0));
+      ArrayList<Double> e2 = visit(ctx.expression(1));
+      ArrayList<Double> result = new ArrayList<>();
+
+      if (e1 != null && e2 != null) {
+         for(int i=0; i < Math.min(e1.size(), e2.size()) ; i++ ) {
+            result.add(e1.get(i) - e2.get(i));
+         }
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return result;
+   }
+
+   @Override public ArrayList<Double> visitExprArray(VectorParser.ExprArrayContext ctx) {
+      
+      String numbers = ctx.ARRAY().getText();
+      ArrayList<Double> array = new ArrayList<>();
+
+      String[] number = numbers.substring(1, numbers.length() - 1).split(",");
+
+      for (String i : number) {
+         array.add(Double.parseDouble(i));
+      }
+
+      return array;
+
+   }
+
+   @Override public ArrayList<Double> visitExprId(VectorParser.ExprIdContext ctx) {
+      String id = ctx.ID().getText();
+
+      if (id != null) {
+         return var.get(id);
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return null;
+   }
+
+   @Override public ArrayList<Double> visitExprAdd(VectorParser.ExprAddContext ctx) {
+      ArrayList<Double> e1 = visit(ctx.expression(0));
+      ArrayList<Double> e2 = visit(ctx.expression(1));
+
+      ArrayList<Double> result = new ArrayList<>();
+
+      if (e1 != null && e2 != null) {
+         for (int i=0; i < Math.min(e1.size(), e2.size()) ; i++) {
+            result.add(e1.get(i) + e2.get(i));
+         }
+      }
+      else {
+         System.err.println("ERROR");
+      }
+      return result;
+   }
+
+   @Override public ArrayList<Double> visitExprMulti(VectorParser.ExprMultiContext ctx) {
+      ArrayList<Double> e1 = visit(ctx.expression(0));
+      ArrayList<Double> e2 = visit(ctx.expression(1));
+
+      ArrayList<Double> array = new ArrayList<>();
+
+      if (e1 != null && e2 != null) {
+         if (e1.size() == 1) {
+            for (Double i : e2) {
+               array.add(e1.get(0) * i);
+            }
+         }
+         else if (e2.size() == 1) {
+            for (Double i : e1) {
+               array.add(i * e2.get(0));
+            }
+         }
+         else if (e1.size() == 1 && e2.size() ==  1) {
+            array.add(e1.get(0) * e2.get(0));
+         }
+         else {
+            System.err.println("ERROR");
+         }
+      }
+
+      return array;
+   }
+
+   @Override public ArrayList<Double> visitExprDivid(VectorParser.ExprDividContext ctx) {
+      ArrayList<Double> e1 = visit(ctx.expression(0));
+      ArrayList<Double> e2 = visit(ctx.expression(1));
+      Double sum = 0.0;
+
+      ArrayList<Double> array = new ArrayList<>();
+
+      if (e1 != null && e2 != null) {
+         if (e1.size() == e2.size()) {
+            for ( int i = 0; i < e1.size(); i++) {
+               sum = sum + (e1.get(i) * e2.get(i));
+            }
+            array.add(sum);
+         }
+         else {
+            System.err.println("ERROR");
+         }
+      }
+      else {
+         System.err.println("ERROR");
+      }
+      return array;
+   }
+}

@@ -1,0 +1,7 @@
+# p1.txt
+output "1 2 3";     #writes getText
+$v1="hello";
+output $v1;
+output abc;
+$v1=bye;
+output $v1;

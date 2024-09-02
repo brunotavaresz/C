@@ -1,0 +1,7 @@
+# p1.txt
+show [1,2];     # escreve na consola o vector [1.0, 2.0]
+[3] -> v1;
+show v1;
+show 3;
+5.5 -> e1;
+show e1;

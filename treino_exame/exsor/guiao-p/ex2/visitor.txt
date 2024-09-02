@@ -1,0 +1,106 @@
+import java.util.HashMap;
+
+@SuppressWarnings("CheckReturnValue")
+public class execute extends FracLangBaseVisitor<Fraction> {
+
+   HashMap<String, Fraction> var = new HashMap<>();
+
+   @Override public Fraction visitProgram(FracLangParser.ProgramContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public Fraction visitStat(FracLangParser.StatContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public Fraction visitDisplay(FracLangParser.DisplayContext ctx) {
+      Fraction result = visit(ctx.expression());
+
+      if (result != null) {
+         System.out.println(result);
+      }
+      else {
+         System.err.println("Error");
+      }
+
+      return result;
+   }
+
+   @Override public Fraction visitAssigment(FracLangParser.AssigmentContext ctx) {
+      Fraction result = visit(ctx.expression());
+      String id = ctx.ID().getText();
+
+      if (result != null && id != null) {
+         var.put(id, result);
+      }
+      else {
+         System.out.println("Error");
+      }
+
+      return result;
+   }
+
+   @Override public Fraction visitExprFrac(FracLangParser.ExprFracContext ctx) {
+      String fraction = ctx.FRACTION().getText();
+      Fraction result = new Fraction(fraction);
+
+      if (result == null) {
+         System.out.println("invalid fraction");
+         return null;
+      }
+
+      return result;
+   }
+
+   @Override public Fraction visitExprUniMais(FracLangParser.ExprUniMaisContext ctx) {
+      String result = visit(ctx.expression());
+      result 
+   }
+
+   @Override public Fraction visitExprUniMenos(FracLangParser.ExprUniMenosContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public Fraction visitExprSub(FracLangParser.ExprSubContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public Fraction visitExprMul(FracLangParser.ExprMulContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public Fraction visitExprId(FracLangParser.ExprIdContext ctx) {
+      String id = ctx.ID().getText();
+
+      if (var.containsKey(id)) {
+         return var.get(id);
+      }
+      else {
+         System.out.println("Error");
+      }
+
+      return null;
+   }
+
+   @Override public Fraction visitExprAdd(FracLangParser.ExprAddContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public Fraction visitExprDiv(FracLangParser.ExprDivContext ctx) {
+      Fraction res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+}

@@ -1,0 +1,65 @@
+import java.util.HashMap;
+
+@SuppressWarnings("CheckReturnValue")
+public class execute extends CalComplexBaseVisitor<String> {
+
+   HashMap<String,String> var = new HashMap<>();
+
+   @Override public String visitProgram(CalComplexParser.ProgramContext ctx) {
+      String res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public String visitStat(CalComplexParser.StatContext ctx) {
+      String res = null;
+      return visitChildren(ctx);
+      //return res;
+   }
+
+   @Override public String visitPrint(CalComplexParser.PrintContext ctx) {
+      String result = visit(ctx.expression());
+
+      if (result != null) {
+         System.out.println(result);
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return result;
+   }
+
+   @Override public String visitAssigment(CalComplexParser.AssigmentContext ctx) {
+      String id = ctx.ID().getText();
+      String result = visit(ctx.expression());
+
+      if(id != null && result != null) {
+         var.put(id, result);
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return null;
+   }
+
+   @Override public String visitExprComplex(CalComplexParser.ExprComplexContext ctx) {
+      String result = ctx.COMPLEX().getText();
+
+      return result;
+   }
+
+   @Override public String visitExprId(CalComplexParser.ExprIdContext ctx) {
+      String id = ctx.ID().getText();
+
+      if(var.containsKey(id)) {
+         return var.get(id);
+      }
+      else {
+         System.err.println("ERROR");
+      }
+
+      return null;
+   }
+}

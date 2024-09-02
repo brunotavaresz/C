@@ -1,0 +1,125 @@
+import java.util.HashMap;
+
+@SuppressWarnings("CheckReturnValue")
+public class execute extends HashMapBaseVisitor<Object> {
+
+    HashMap<String, HashMap<String, String>> var = new HashMap<>();
+
+    @Override
+    public Object visitProgram(HashMapParser.ProgramContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Object visitStat(HashMapParser.StatContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Object visitAssignment(HashMapParser.AssignmentContext ctx) {
+        String id = ctx.ID().getText();
+        HashMap<String, String> map = (HashMap<String, String>) visit(ctx.expression());
+
+        if (id != null && map != null) {
+            var.put(id, map);
+        } else {
+            System.err.println("ERROR: Invalid assignment");
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitPrint(HashMapParser.PrintContext ctx) {
+        Object map = visit(ctx.expression());
+        if (map != null) {
+            System.out.println(map);
+        } else {
+            System.err.println("ERROR: Invalid print statement");
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitMapInsert(HashMapParser.MapInsertContext ctx) {
+        String id = ctx.ID().getText();
+        String key = (String) visit(ctx.expression(0));
+        String value = (String) visit(ctx.expression(1));
+
+        if (var.containsKey(id)) {
+            var.get(id).put(key, value);
+        } else {
+            System.err.println("ERROR: Map not found");
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitExprMapLiteral(HashMapParser.ExprMapLiteralContext ctx) {
+        HashMap<String, String> map = new HashMap<>();
+
+        for (int i = 0; i < ctx.STRING().size(); i += 2) {
+            String key = ctx.STRING(i).getText();
+            key = key.substring(1, key.length() - 1); // Remove quotes
+            String value = ctx.STRING(i + 1).getText();
+            value = value.substring(1, value.length() - 1); // Remove quotes
+
+            map.put(key, value);
+        }
+
+        return map;
+    }
+
+    @Override
+    public Object visitExprString(HashMapParser.ExprStringContext ctx) {
+        String result = ctx.STRING().getText();
+        return result.substring(1, result.length() - 1); // Remove quotes
+    }
+
+    @Override
+    public Object visitExprID(HashMapParser.ExprIDContext ctx) {
+        String id = ctx.ID().getText();
+
+        if (id != null && var.containsKey(id)) {
+            return var.get(id);
+        } else {
+            System.err.println("ERROR: Map ID not found");
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitExprMapAccess(HashMapParser.ExprMapAccessContext ctx) {
+        String id = ctx.ID().getText();
+        String key = ctx.STRING().getText();
+        key = key.substring(1, key.length() - 1); // Remove quotes
+
+        if (var.containsKey(id) && var.get(id).containsKey(key)) {
+            return var.get(id).get(key);
+        } else {
+            System.err.println("ERROR: Map or key not found");
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitExprMapChange(HashMapParser.ExprMapChangeContext ctx) {
+        String idFirst = ctx.MapAccess(0).ID().getText();
+        String keyFirst = ctx.MapAccess(0).STRING().getText();
+        keyFirst = keyFirst.substring(1, keyFirst.length() - 1); // Remove quotes
+
+        String idSecond = ctx.MapAccess(1).ID().getText();
+        String keySecond = ctx.MapAccess(1).STRING().getText();
+        keySecond = keySecond.substring(1, keySecond.length() - 1); // Remove quotes
+
+        if (var.containsKey(idFirst) && var.containsKey(idSecond) && var.get(idSecond).containsKey(keySecond)) {
+            String valueSecond = var.get(idSecond).get(keySecond);
+            var.get(idFirst).put(keyFirst, valueSecond);
+        } else {
+            System.err.println("ERROR: Map or key not found in map change");
+        }
+
+        return null;
+    }
+}

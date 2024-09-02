@@ -1,0 +1,5 @@
+// p0.txt
+
+print "Bom dia !" 
+t1: "Miguel"
+print t1

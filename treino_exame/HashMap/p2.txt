@@ -1,0 +1,7 @@
+// p2.txt
+map1: { "name" : "Alice", "profession" : "Engineer" };
+print map1;
+map2: { "company" : "TechCorp", "location" : "San Francisco" };
+print map2;
+map1["company"] : map2["company"]; // Atribui valor de uma chave de map2 a uma chave de map1
+print map1;

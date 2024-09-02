@@ -1,0 +1,5 @@
+# p2.txt
+output "Hello", $v1, nl, "World";    # Output com múltiplas expressões e mudança de linha
+$v1 = "OpenAI";
+output $v1, NL;                      # Usando NL para mudança de linha
+output "Testing", "multiple", "arguments", nl, "in", "one", "line";

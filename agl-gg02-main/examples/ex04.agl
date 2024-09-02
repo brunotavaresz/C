@@ -1,0 +1,58 @@
+num1 : Integer = 1;
+num2 : Integer = 1;
+
+
+Blob_ex : Blob at (50,0) with {
+    point = (0,0);
+    point1= (20,20);
+    point2= (20,0);
+    point3= (0,20);
+    point4= (10,10);
+    point5= (10,0);
+    point6= (0,10);
+    point7= (10,20);
+    fill = "red";
+}
+
+Poly_ex : Polygon at (0,50) with {
+    point = (50,50);
+    point1= (70,70);
+    point2= (70,50);
+
+    fill = "green";
+}
+
+poly_line : PolyLine at (50,50) with {
+    point = (100,100);
+    point1= (120,120);
+    point2= (150,100);
+    point3= (120,170);
+    fill = "blue";
+}
+
+Spline_ex : Spline at (0,0) with {
+    point = (0,50);
+    point1= (50,0);
+    fill = "black";
+}
+view : View with {
+    Ox = 0;
+    Oy = 0;
+    width = 401;
+    height = 401;
+    title = "New objects";
+    background = "alice blue";
+}
+
+
+if num2 == num1 do
+    for i in 1..10 do {
+        move Spline_ex by (10,0);
+}
+else do
+    print "This is not a test";
+    end
+
+print "Press any mouse button to quit";
+pos : Point = wait mouse click; # instantiate a Point and waits for a mouse click
+

@@ -1,0 +1,7 @@
+// p3.txt
+map1: { "brand" : "Toyota", "model" : "Corolla" };
+print map1;
+map1["model"] : "Camry"; // Atualiza o valor associado à chave "model"
+print map1["model"]; // Imprime o valor atualizado associado à chave "model"
+map1["year"] : "2021"; // Adiciona uma nova chave-valor a map1
+print map1;
